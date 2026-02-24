@@ -2,7 +2,7 @@ from fastapi import FastAPI, File, UploadFile
 import shutil
 import os
 from app.image_processing import process_image
-
+from fastapi.middleware.cors import CORSMiddleware
 
 # // Database setup
 from app.database import engine
@@ -13,6 +13,18 @@ Base.metadata.create_all(bind=engine)
 
 # // FastAPI setup
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
